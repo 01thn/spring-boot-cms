@@ -8,13 +8,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.time.ZonedDateTime;
 import java.util.List;
 
 @Controller
@@ -43,14 +44,14 @@ public class PostController {
         Post post = new Post();
         try {
             post.setImage(image.getBytes());
-        } catch (IOException e){
+        } catch (IOException e) {
             model.addAttribute("photoMessage", "A problem during of photo uploading");
             return "post";
         }
         post.setTitle(title);
         post.setDescription(description);
-        if(date==null){
-            date=LocalDateTime.now();
+        if (date == null) {
+            date = LocalDateTime.now();
         }
         post.setDateTime(date);
         List<Post> authorPosts = author.getPosts();
