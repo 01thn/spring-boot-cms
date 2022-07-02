@@ -5,13 +5,14 @@ import com.thn.springbootcms.entity.User;
 import com.thn.springbootcms.repository.UserRepository;
 import com.thn.springbootcms.util.PasswordEncoderUtil;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.HashSet;
 import java.util.Optional;
 
 @Service
+@Transactional
 public class UserService {
     @Autowired
     private UserRepository userRepository;
@@ -19,12 +20,15 @@ public class UserService {
     @Autowired
     private PasswordEncoderUtil passwordEncoder;
 
-    public User save(User newUser) {
+    public Optional<User> save(User newUser) {
+        if (findUserByUsername(newUser.getUsername()).isPresent()) {
+            return Optional.empty();
+        }
         newUser.setPassword(passwordEncoder.encode(newUser.getPassword()));
         HashSet<Role> roles = new HashSet<>();
         roles.add(Role.USER);
         newUser.setRoleSet(roles);
-        return userRepository.save(newUser);
+        return Optional.of(userRepository.save(newUser));
     }
 
     public Optional<User> findUserByUsername(String username) {

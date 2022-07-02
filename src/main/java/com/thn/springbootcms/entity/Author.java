@@ -1,6 +1,7 @@
 package com.thn.springbootcms.entity;
 
 import lombok.Data;
+import org.hibernate.annotations.Type;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -13,7 +14,10 @@ public class Author {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     @Lob
+    @Type(type = "org.hibernate.type.ImageType")
     private byte[] photo;
+    @ManyToOne(cascade = CascadeType.ALL)
+    private User user;
     private String firstName;
     private String lastName;
     private String additional;

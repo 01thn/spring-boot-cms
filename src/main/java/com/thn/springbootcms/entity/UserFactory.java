@@ -1,8 +1,8 @@
 package com.thn.springbootcms.entity;
 
-public class AuthUserFactory {
-    public static AuthUser create(User user) {
-        return new AuthUser(user.getId(),
+public class UserFactory {
+    public static User create(AuthUser user) {
+        return new User(user.getId(),
                 user.getUsername(),
                 user.getRealName(),
                 user.getEmail(),

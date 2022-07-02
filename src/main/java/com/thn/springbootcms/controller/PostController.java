@@ -2,8 +2,10 @@ package com.thn.springbootcms.controller;
 
 import com.thn.springbootcms.entity.Author;
 import com.thn.springbootcms.entity.Post;
+import com.thn.springbootcms.entity.User;
 import com.thn.springbootcms.service.AuthorService;
 import com.thn.springbootcms.service.PostService;
+import com.thn.springbootcms.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.stereotype.Controller;
@@ -14,9 +16,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 
 @Controller
 @RequestMapping("/post")
@@ -28,15 +32,22 @@ public class PostController {
     @Autowired
     private AuthorService authorService;
 
+    @Autowired
+    private UserService userService;
+
     @GetMapping
-    public String getPage(Model model) {
-        model.addAttribute("authorList", authorService.findAll());
+    public String getPage(HttpServletRequest request,
+                          Model model) {
+        Optional<User> userByUsername = userService.findUserByUsername((String) request.getSession()
+                .getAttribute("username"));
+        userByUsername.ifPresent(user -> model.addAttribute("authorList", authorService.findAuthorsByUser(user)));
         return "post";
     }
 
     @PostMapping
     public String save(Model model,
-                       @RequestParam(value = "image") MultipartFile image,
+                       HttpServletRequest request,
+                       @RequestParam(value = "image", required = false) MultipartFile image,
                        String title,
                        String description,
                        Author author,
@@ -57,6 +68,6 @@ public class PostController {
         List<Post> authorPosts = author.getPosts();
         authorPosts.add(postService.save(post));
         authorService.save(author);
-        return "redirect:/";
+        return "redirect:/user/board";
     }
 }
