@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @Transactional
@@ -25,5 +26,9 @@ public class AuthorService {
 
     public List<Author> findAuthorsByUser(User user) {
         return authorRepository.findAuthorsByUser(user);
+    }
+
+    public Optional<Author> findAuthorByFirstNameAndLastName(String firstname, String lastname) {
+        return authorRepository.findAuthorByFirstNameAndLastName(firstname, lastname);
     }
 }

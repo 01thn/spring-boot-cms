@@ -39,6 +39,10 @@ public class AuthorController {
                        String firstName,
                        String lastName,
                        String additional) {
+        if (authorService.findAuthorByFirstNameAndLastName(firstName, lastName).isPresent()) {
+            model.addAttribute("errorMessage", "Such author exists");
+            return "author";
+        }
         Author author = new Author();
         try {
             author.setPhoto(image.getBytes());

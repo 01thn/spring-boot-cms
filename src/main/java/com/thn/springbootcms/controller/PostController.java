@@ -2,18 +2,17 @@ package com.thn.springbootcms.controller;
 
 import com.thn.springbootcms.entity.Author;
 import com.thn.springbootcms.entity.Post;
+import com.thn.springbootcms.entity.Tag;
 import com.thn.springbootcms.entity.User;
 import com.thn.springbootcms.service.AuthorService;
 import com.thn.springbootcms.service.PostService;
+import com.thn.springbootcms.service.TagService;
 import com.thn.springbootcms.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
@@ -35,6 +34,9 @@ public class PostController {
     @Autowired
     private UserService userService;
 
+    @Autowired
+    private TagService tagService;
+
     @GetMapping
     public String getPage(HttpServletRequest request,
                           Model model) {
@@ -51,7 +53,8 @@ public class PostController {
                        String title,
                        String description,
                        Author author,
-                       @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime date) {
+                       @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime date,
+                       String tags) {
         Post post = new Post();
         try {
             post.setImage(image.getBytes());
@@ -65,9 +68,20 @@ public class PostController {
             date = LocalDateTime.now();
         }
         post.setDateTime(date);
-        List<Post> authorPosts = author.getPosts();
-        authorPosts.add(postService.save(post));
-        authorService.save(author);
+        List<Tag> tagList = tagService.save(tags);
+        post.setTags(tagList);
+        post.setAuthor(author);
+        Optional<User> userByUsername = userService.findUserByUsername((String) request.getSession()
+                .getAttribute("username"));
+        userByUsername.ifPresent(post::setUser);
+        postService.save(post);
+        return "redirect:/user/board";
+    }
+
+
+    @GetMapping("/del/{id}")
+    public String deletePost(@PathVariable Long id) {
+        postService.deletePost(id);
         return "redirect:/user/board";
     }
 }

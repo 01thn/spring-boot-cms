@@ -2,8 +2,9 @@ package com.thn.springbootcms.controller;
 
 import com.thn.springbootcms.entity.AuthUser;
 import com.thn.springbootcms.entity.User;
-import com.thn.springbootcms.service.AuthorService;
+import com.thn.springbootcms.service.PostService;
 import com.thn.springbootcms.service.UserService;
+import com.thn.springbootcms.util.ImageUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
@@ -23,7 +24,10 @@ public class UserController {
     private UserService userService;
 
     @Autowired
-    private AuthorService authorService;
+    private PostService postService;
+
+    @Autowired
+    private ImageUtil imageUtil;
 
     @GetMapping("/sign-in")
     public String getSignInPage(Model model,
@@ -64,8 +68,9 @@ public class UserController {
         Optional<User> userByUsername = userService.findUserByUsername((String) request.getSession()
                 .getAttribute("username"));
         userByUsername.ifPresent(user ->
-                model.addAttribute("authors", authorService.findAuthorsByUser(user))
+                model.addAttribute("posts", postService.findPostsByUser(user))
         );
+        model.addAttribute("imgUtil", imageUtil);
         return "board";
     }
 }

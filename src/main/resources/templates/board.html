@@ -38,36 +38,36 @@
     <div class="row">
         <div class="col-lg-8">
             <!-- Post content-->
-            <div th:each="author : ${authors}">
-                <article th:each="post : ${author.getPosts()}">
-                    <!-- Post header-->
-                    <header class="mb-4">
-                        <!-- Post title-->
-                        <h1 th:text="${post.title}" class="fw-bolder mb-1"></h1>
-                        <!-- Post meta content-->
-                        <div th:text="${post.getDateTime()}" class="text-muted fst-italic mb-2">Posted on January 1,
-                            2022 by
-                            Start Bootstrap
-                        </div>
-                        <div th:text="${author.getFirstNameAndLastName()}" class="text-muted fst-italic mb-2">Posted on
-                            January 1, 2022 by Start Bootstrap
-                        </div>
-                        <!-- Post categories-->
-                        <a class="badge bg-secondary text-decoration-none link-light" href="#!">Web Design</a>
-                        <a class="badge bg-secondary text-decoration-none link-light" href="#!">Freebies</a>
-                    </header>
-                    <!-- Preview image figure-->
-                    <figure class="mb-4"><img class="img-fluid rounded"
-                                              src="https://dummyimage.com/900x400/ced4da/6c757d.jpg" alt="..."/>
-                    </figure>
-                    <!-- Post content-->
-                    <section class="mb-5">
-                        <p th:text="${post.description}" class="fs-5 mb-4">Science is an enterprise that should be
-                            cherished as an activity of the free human mind. Because it transforms who we are, how we
-                            live, and it gives us an understanding of our place in the universe.</p>
-                    </section>
-                </article>
-            </div>
+            <article th:each="post : ${posts}">
+                <!-- Post header-->
+                <header class="mb-4">
+                    <!-- Post title-->
+                    <h1 th:text="${post.title}" class="fw-bolder mb-1"></h1>
+                    <!-- Post meta content-->
+                    <div th:text="${post.getDateTime()}" class="text-muted fst-italic mb-2"></div>
+                    <div th:text="${post.author.getFirstNameAndLastName()}" class="text-muted fst-italic mb-2">Posted on
+                        January 1, 2022 by Start Bootstrap
+                    </div>
+                    <!-- Post categories-->
+                    <div th:each="tag : ${post.tags}">
+                        <a th:text="${tag.tag}" class="badge bg-secondary text-decoration-none link-light" href="#!">Web
+                            Design</a>
+                    </div>
+                </header>
+                <!-- Preview image figure-->
+                <figure class="mb-4"><img class="img-fluid rounded"
+                                          th:src="'data:image/jpeg;base64,' + ${imgUtil.getImgData(post.getImage())}"
+                                          alt="No Image"/>
+                </figure>
+                <!-- Post content-->
+                <section class="mb-5">
+                    <p th:text="${post.description}" class="fs-5 mb-4">Science is an enterprise that should be
+                        cherished as an activity of the free human mind. Because it transforms who we are, how we
+                        live, and it gives us an understanding of our place in the universe.</p>
+                    <a th:href="@{/post/del/{id}(id=${post.id})}" class="btn btn-danger">Delete post</a>
+                </section>
+
+            </article>
         </div>
         <!-- Side widgets-->
         <div class="col-lg-4">

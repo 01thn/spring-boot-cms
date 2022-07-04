@@ -4,8 +4,6 @@ import lombok.Data;
 import org.hibernate.annotations.Type;
 
 import javax.persistence.*;
-import java.util.ArrayList;
-import java.util.List;
 
 @Data
 @Entity
@@ -21,8 +19,6 @@ public class Author {
     private String firstName;
     private String lastName;
     private String additional;
-    @OneToMany(cascade = CascadeType.ALL)
-    private List<Post> posts = new ArrayList<>();
 
     public String getFirstNameAndLastName() {
         return firstName + " " + lastName;
