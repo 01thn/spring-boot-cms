@@ -7,15 +7,6 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
-
-import javax.servlet.ServletException;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
-import java.io.IOException;
 
 @Configuration
 public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
@@ -32,6 +23,9 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     @Autowired
     private AuthSuccessHandler authSuccessHandler;
 
+    @Autowired
+    private LogOutSuccessHandler logOutSuccessHandler;
+
     private String[] PUBLIC_ENDPOINTS = {
             "/user/sign-up",
             "/**/*.css",
@@ -42,8 +36,6 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
 
     private String LOGIN_ENDPOINT = "/user/sign-in";
-
-    private String BOARD_ENDPOINT = "/user/board";
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
@@ -57,7 +49,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .permitAll()
                 .successHandler(authSuccessHandler)
                 .and()
-                .logout().permitAll()
+                .logout().logoutSuccessHandler(logOutSuccessHandler).permitAll()
                 .and()
                 .apply(new JWTConfig(jwtTokenProvider));
     }

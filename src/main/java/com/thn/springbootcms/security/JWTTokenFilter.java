@@ -10,26 +10,25 @@ import javax.servlet.ServletException;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 @RequiredArgsConstructor
 public class JWTTokenFilter extends GenericFilterBean {
 
-	private final JWTTokenProvider jwtTokenProvider;
+    private final JWTTokenProvider jwtTokenProvider;
 
-	@Override
-	public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain) throws IOException, ServletException {
+    @Override
+    public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain) throws IOException, ServletException {
 
-		String token = jwtTokenProvider.resolveToken((HttpServletRequest) servletRequest);
-		if (token != null && jwtTokenProvider.validateToken(token)) {
-			Authentication auth = jwtTokenProvider.getAuthentication(token);
+        String token = jwtTokenProvider.resolveToken((HttpServletRequest) servletRequest);
+        if (token != null && jwtTokenProvider.validateToken(token)) {
+            Authentication auth = jwtTokenProvider.getAuthentication(token);
 
-			if (auth != null) {
-				SecurityContextHolder.getContext().setAuthentication(auth);
-			}
-		}
-		((HttpServletRequest) servletRequest).getSession().setAttribute("token", token);
-		filterChain.doFilter(servletRequest, servletResponse);
-	}
+            if (auth != null) {
+                SecurityContextHolder.getContext().setAuthentication(auth);
+            }
+        }
+        ((HttpServletRequest) servletRequest).getSession().setAttribute("token", token);
+        filterChain.doFilter(servletRequest, servletResponse);
+    }
 }

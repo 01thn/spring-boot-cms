@@ -4,6 +4,8 @@ import com.thn.springbootcms.entity.Author;
 import com.thn.springbootcms.entity.User;
 import com.thn.springbootcms.service.AuthorService;
 import com.thn.springbootcms.service.UserService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -27,8 +29,11 @@ public class AuthorController {
     @Autowired
     private UserService userService;
 
+    private static final Logger logger = LoggerFactory.getLogger(AuthorController.class);
+
     @GetMapping
     public String getPage() {
+        logger.info("GET for author page");
         return "author";
     }
 
@@ -41,6 +46,7 @@ public class AuthorController {
                        String additional) {
         if (authorService.findAuthorByFirstNameAndLastName(firstName, lastName).isPresent()) {
             model.addAttribute("errorMessage", "Such author exists");
+            logger.info("POST for save author page. Trying to create author copy");
             return "author";
         }
         Author author = new Author();
@@ -48,6 +54,7 @@ public class AuthorController {
             author.setPhoto(image.getBytes());
         } catch (IOException e) {
             model.addAttribute("photoMessage", "A problem during of photo uploading");
+            logger.error("POST for save author page. Error during of photo uploading");
             return "author";
         }
         Optional<User> userByUsername = userService.findUserByUsername((String) request.getSession()
@@ -57,6 +64,7 @@ public class AuthorController {
         author.setLastName(lastName);
         author.setAdditional(additional);
         authorService.save(author);
+        logger.info("POST for save author page");
         return "redirect:/user/board";
     }
 }

@@ -8,6 +8,8 @@ import com.thn.springbootcms.service.AuthorService;
 import com.thn.springbootcms.service.PostService;
 import com.thn.springbootcms.service.TagService;
 import com.thn.springbootcms.service.UserService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.stereotype.Controller;
@@ -37,12 +39,15 @@ public class PostController {
     @Autowired
     private TagService tagService;
 
+    private static final Logger logger = LoggerFactory.getLogger(PostController.class);
+
     @GetMapping
     public String getPage(HttpServletRequest request,
                           Model model) {
         Optional<User> userByUsername = userService.findUserByUsername((String) request.getSession()
                 .getAttribute("username"));
         userByUsername.ifPresent(user -> model.addAttribute("authorList", authorService.findAuthorsByUser(user)));
+        logger.info("GET for post page");
         return "post";
     }
 
@@ -60,6 +65,7 @@ public class PostController {
             post.setImage(image.getBytes());
         } catch (IOException e) {
             model.addAttribute("photoMessage", "A problem during of photo uploading");
+            logger.error("POST for save author page. Error during of photo uploading");
             return "post";
         }
         post.setTitle(title);
@@ -75,6 +81,7 @@ public class PostController {
                 .getAttribute("username"));
         userByUsername.ifPresent(post::setUser);
         postService.save(post);
+        logger.info("POST for save post page");
         return "redirect:/user/board";
     }
 
@@ -82,6 +89,7 @@ public class PostController {
     @GetMapping("/del/{id}")
     public String deletePost(@PathVariable Long id) {
         postService.deletePost(id);
+        logger.info("GET for delete post page");
         return "redirect:/user/board";
     }
 }

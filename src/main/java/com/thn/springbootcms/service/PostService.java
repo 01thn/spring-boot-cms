@@ -24,7 +24,7 @@ public class PostService {
         return postReporitory.findPostsByUser(user);
     }
 
-    public List<Post> findAll(){
+    public List<Post> findAll() {
         return postReporitory.findAll();
     }
 

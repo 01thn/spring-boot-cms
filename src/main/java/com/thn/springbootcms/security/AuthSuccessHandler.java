@@ -1,5 +1,7 @@
 package com.thn.springbootcms.security;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -17,6 +19,8 @@ public class AuthSuccessHandler implements AuthenticationSuccessHandler {
     @Autowired
     private JWTTokenProvider jwtTokenProvider;
 
+    private static final Logger logger = LoggerFactory.getLogger(AuthSuccessHandler.class);
+
     @Override
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException, ServletException {
         AuthUser authUser = (AuthUser) SecurityContextHolder
@@ -29,6 +33,7 @@ public class AuthSuccessHandler implements AuthenticationSuccessHandler {
         request.getSession().setAttribute("token0", isSplitToken[0]);
         request.getSession().setAttribute("token1", isSplitToken[1]);
         request.getSession().setAttribute("token2", isSplitToken[2]);
+        logger.info("POST for user sign in. User successfully signed in");
         response.sendRedirect("/user/board");
     }
 }

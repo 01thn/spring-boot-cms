@@ -35,9 +35,9 @@ public class ApiController {
         System.out.println(token);
         String username = jwtTokenProvider.getUserUsernameFromJWT(token);
         Optional<User> userByUsername = userService.findUserByUsername(username);
-        if(userByUsername.isEmpty()){
+        if (userByUsername.isEmpty()) {
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         }
-        return new ResponseEntity<>(postService.findPostsByUser(userByUsername.get()),HttpStatus.OK);
+        return new ResponseEntity<>(postService.findPostsByUser(userByUsername.get()), HttpStatus.OK);
     }
 }
