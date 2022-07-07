@@ -1,4 +1,6 @@
-package com.thn.springbootcms.entity;
+package com.thn.springbootcms.security;
+
+import com.thn.springbootcms.entity.User;
 
 public class AuthUserFactory {
     public static AuthUser create(User user) {

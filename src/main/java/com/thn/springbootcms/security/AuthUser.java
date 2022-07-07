@@ -1,5 +1,6 @@
-package com.thn.springbootcms.entity;
+package com.thn.springbootcms.security;
 
+import com.thn.springbootcms.entity.Role;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import org.springframework.security.core.GrantedAuthority;

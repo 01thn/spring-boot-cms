@@ -17,6 +17,9 @@ public class TagService {
     private TagRepository tagRepository;
 
     public List<Tag> save(String tags) {
+        if(tags.isEmpty()){
+            return null;
+        }
         List<Tag> tagList = new ArrayList<>();
         Stream<String> isSplitTags = splitTags(tags);
         isSplitTags.forEach(

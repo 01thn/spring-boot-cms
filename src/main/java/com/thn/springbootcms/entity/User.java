@@ -31,4 +31,8 @@ public class User {
     @Enumerated(EnumType.STRING)
     @ElementCollection(fetch = FetchType.EAGER)
     private Set<Role> roleSet = new HashSet<>();
+
+    public User(String username) {
+        this.username = username;
+    }
 }

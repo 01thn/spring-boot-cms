@@ -1,12 +1,10 @@
 package com.thn.springbootcms.controller;
 
-import com.thn.springbootcms.entity.AuthUser;
 import com.thn.springbootcms.entity.User;
 import com.thn.springbootcms.service.PostService;
 import com.thn.springbootcms.service.UserService;
 import com.thn.springbootcms.util.ImageUtil;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -60,11 +58,6 @@ public class UserController {
 
     @GetMapping("/board")
     public String getBoardPage(Model model, HttpServletRequest request) {
-        AuthUser authUser = (AuthUser) SecurityContextHolder
-                .getContext()
-                .getAuthentication()
-                .getPrincipal();
-        request.getSession().setAttribute("username", authUser.getUsername());
         Optional<User> userByUsername = userService.findUserByUsername((String) request.getSession()
                 .getAttribute("username"));
         userByUsername.ifPresent(user ->
@@ -72,5 +65,15 @@ public class UserController {
         );
         model.addAttribute("imgUtil", imageUtil);
         return "board";
+    }
+
+    @GetMapping("/api-info")
+    public String getApiInfo(Model model, HttpServletRequest request) {
+        String token0 = ((String) request.getSession().getAttribute("token0"));
+        String token1 = ((String) request.getSession().getAttribute("token1"));
+        String token2 = ((String) request.getSession().getAttribute("token2"));
+        String token = token0 + "." + token1 + "." + token2;
+        model.addAttribute("token", token);
+        return "api-info";
     }
 }

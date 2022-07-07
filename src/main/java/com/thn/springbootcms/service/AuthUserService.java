@@ -1,6 +1,6 @@
 package com.thn.springbootcms.service;
 
-import com.thn.springbootcms.entity.AuthUserFactory;
+import com.thn.springbootcms.security.AuthUserFactory;
 import com.thn.springbootcms.entity.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;

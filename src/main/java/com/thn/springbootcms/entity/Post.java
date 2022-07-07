@@ -1,11 +1,13 @@
 package com.thn.springbootcms.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 import org.hibernate.annotations.Type;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.Arrays;
 import java.util.List;
 
 @Data
@@ -26,6 +28,11 @@ public class Post {
     private LocalDateTime dateTime;
     @ManyToMany
     private List<Tag> tags;
+
+    @JsonIgnore
+    public User getUser() {
+        return user;
+    }
 
     public String getDateTime() {
         return dateTime.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm"));
