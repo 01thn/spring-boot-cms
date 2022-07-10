@@ -16,8 +16,11 @@ public class AuthorService {
     @Autowired
     private AuthorRepository authorRepository;
 
-    public Author save(Author author) {
-        return authorRepository.save(author);
+    public Optional<Author> save(Author author) {
+        if (findAuthorByFirstNameAndLastName(author.getFirstName(), author.getLastName()).isPresent()) {
+            return Optional.empty();
+        }
+        return Optional.of(authorRepository.save(author));
     }
 
     public List<Author> findAll() {

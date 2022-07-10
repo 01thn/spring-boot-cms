@@ -44,11 +44,6 @@ public class AuthorController {
                        String firstName,
                        String lastName,
                        String additional) {
-        if (authorService.findAuthorByFirstNameAndLastName(firstName, lastName).isPresent()) {
-            model.addAttribute("errorMessage", "Such author exists");
-            logger.info("POST for save author page. Trying to create author copy");
-            return "author";
-        }
         Author author = new Author();
         try {
             author.setPhoto(image.getBytes());
@@ -63,7 +58,11 @@ public class AuthorController {
         author.setFirstName(firstName);
         author.setLastName(lastName);
         author.setAdditional(additional);
-        authorService.save(author);
+        if (authorService.save(author).isEmpty()) {
+            model.addAttribute("errorMessage", "Such author exists");
+            logger.info("POST for save author page. Trying to create author copy");
+            return "author";
+        }
         logger.info("POST for save author page");
         return "redirect:/user/board";
     }

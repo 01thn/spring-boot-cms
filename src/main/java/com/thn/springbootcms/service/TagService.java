@@ -35,7 +35,7 @@ public class TagService {
         return tagList;
     }
 
-    private Stream<String> splitTags(String tags) {
+    public Stream<String> splitTags(String tags) {
         return Stream.of(tags.split(" "));
     }
 
