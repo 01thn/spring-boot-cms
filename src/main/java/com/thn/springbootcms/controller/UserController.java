@@ -62,7 +62,7 @@ public class UserController {
             return "/sign-up";
         }
         logger.info("POST for user sign up. New user was successfully created");
-        return "redirect:/";
+        return "redirect:/user/sign-in";
     }
 
     @GetMapping("/board")

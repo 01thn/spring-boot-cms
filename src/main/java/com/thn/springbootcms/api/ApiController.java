@@ -32,7 +32,6 @@ public class ApiController {
     @GetMapping("/posts")
     public ResponseEntity<List<Post>> getAllPosts(HttpServletRequest request) {
         String token = ((String) request.getSession().getAttribute("token"));
-        System.out.println(token);
         String username = jwtTokenProvider.getUserUsernameFromJWT(token);
         Optional<User> userByUsername = userService.findUserByUsername(username);
         if (userByUsername.isEmpty()) {

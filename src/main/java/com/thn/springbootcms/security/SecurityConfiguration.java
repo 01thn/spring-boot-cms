@@ -27,6 +27,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     private LogOutSuccessHandler logOutSuccessHandler;
 
     private String[] PUBLIC_ENDPOINTS = {
+            "/",
             "/user/sign-up",
             "/**/*.css",
             "/**/*.js",
